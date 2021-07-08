@@ -2,7 +2,6 @@
 import Fastify from "fastify";
 import routeBatch from "./routes/batch";
 import routeObjects from "./routes/objects";
-import routeVerify from "./routes/verify";
 import metricsPlugin from "fastify-metrics";
 
 async function build() {
@@ -29,7 +28,6 @@ async function build() {
 
   routeBatch(fastify);
   routeObjects(fastify);
-  routeVerify(fastify);
 
   return fastify;
 }

@@ -5,7 +5,7 @@ Use use `git` to manage your static files and offload them to a large binary pro
 ## Supported
 
 - [Git LFS v1 Batch API](https://github.com/github/git-lfs/blob/master/docs/api/http-v1-batch.md)
-- [JWT](http://jwt.io) to secure `download`, `upload` and `verify` endpoints
+- [JWT](http://jwt.io) to secure `download`, `upload`
 
 ## Coming Soon
 
@@ -51,6 +51,10 @@ version https://git-lfs.github.com/spec/v1
 oid sha256:a480292a083cffbae4602079113e3b6ed8e7ed24ffabda282eb2054460ad7325
 size 65898
 ```
+
+## No Verification
+
+Why? Because git lfs doesn't use it to prevent commit. If a server responds 200 to an upload, git lfs is hitting verification for the benefit of the server. When this changes, verification will be enabled.
 
 ### Thank you for the original implimentation
 
