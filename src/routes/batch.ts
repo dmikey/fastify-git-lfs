@@ -1,8 +1,8 @@
 "use strict";
 
-var _ = require("lodash");
-var config = require("config");
-var validate = require("jsonschema").validate;
+import _ from "lodash";
+import config from "config";
+import { validate } from "jsonschema";
 
 var { Store } = require("../store");
 

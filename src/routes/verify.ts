@@ -1,6 +1,5 @@
-var config = require("config");
-
-var { Store } = require("../store");
+import config from "config";
+import { Store } from "../store";
 
 const store = Store.getStore(
   config.get("store.type"),

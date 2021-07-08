@@ -1,7 +1,7 @@
 "use strict";
-var jwt = require("jsonwebtoken");
-var config = require("config");
-var { Store } = require("../store");
+import jwt from "jsonwebtoken";
+import config from "config";
+import { Store } from "../store";
 
 const store = Store.getStore(
   config.get("store.type"),
@@ -21,7 +21,7 @@ export default function (fastify: any) {
   fastify.get("/:user/:repo/objects/:oid", async function (req: any, res: any) {
     const jwtVerify = checkJWT("download");
     await jwtVerify(req, res);
-    var size: any = await store.getSize(
+    const size: any = await store.getSize(
       req.params.user,
       req.params.repo,
       req.params.oid
@@ -30,7 +30,7 @@ export default function (fastify: any) {
       res.code(404).send();
     }
     res.set("Content-Length", size);
-    var dataStream: any = await store.get(
+    const dataStream: any = await store.get(
       req.params.user,
       req.params.repo,
       req.params.oid
@@ -39,12 +39,12 @@ export default function (fastify: any) {
   });
 }
 
-var checkJWT = function (action: any) {
-  const JWT_CONFIG = config.get("jwt");
+const checkJWT = function (action: any) {
+  const JWT_CONFIG: any = config.get("jwt");
   return async function (req: any, res: any) {
-    let user = req.params.user;
-    let repo = req.params.repo;
-    let oid = req.params.oid;
+    const user = req.params.user;
+    const repo = req.params.repo;
+    const oid = req.params.oid;
 
     let authorization = req.headers["authorization"];
 
@@ -54,7 +54,7 @@ var checkJWT = function (action: any) {
 
     authorization = authorization.substring(4, authorization.length);
     try {
-      var decoded = jwt.verify(authorization, JWT_CONFIG.secret, {
+      const decoded: any = jwt.verify(authorization, JWT_CONFIG.secret, {
         issuer: JWT_CONFIG.issuer,
       });
       if (

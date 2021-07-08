@@ -51,6 +51,11 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/config@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/config/-/config-0.0.39.tgz#aad18ceb9439329adc3d4c6b91a908a72c715612"
+  integrity sha512-EBHj9lSIyw62vwqCwkeJXjiV6C2m2o+RJZlRWLkHduGYiNBoMXcY6AhSLqjQQ+uPdrPYrOMYvVa41zjo00LbFQ==
+
 "@types/connect@*":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
@@ -81,6 +86,13 @@
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
     "@types/serve-static" "*"
+
+"@types/jsonwebtoken@^8.5.4":
+  version "8.5.4"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.4.tgz#50ccaf0aa6f5d7b9956e70fe323b76e582991913"
+  integrity sha512-4L8msWK31oXwdtC81RmRBAULd0ShnAHjBuKT9MRQpjP0piNrZdXyTRcKY9/UIfhGeKIT4PvF5amOOUbbT/9Wpg==
+  dependencies:
+    "@types/node" "*"
 
 "@types/lodash@^4.14.171":
   version "4.14.171"
