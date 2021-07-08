@@ -9,14 +9,25 @@ const store = Store.getStore(
 );
 
 export default function (fastify: any) {
-  fastify.put("/:user/:repo/objects/:oid", async function (req: any, res: any) {
-    const jwtVerify = checkJWT("upload");
-    await jwtVerify(req, res);
-    if (req.body) {
-      await store.put(req.params.user, req.params.repo, req.params.oid, req);
-      if (!res.sent) res.code(200).send();
+  fastify.put(
+    "/:user/:repo/objects/:oid",
+    function (req: any, res: any, done: any) {
+      const jwtVerify = checkJWT("upload");
+
+      if (req.body) {
+        (async () => {
+          await jwtVerify(req, res);
+          await store.put(
+            req.params.user,
+            req.params.repo,
+            req.params.oid,
+            req
+          );
+          res.code(200).send();
+        })();
+      }
     }
-  });
+  );
 
   fastify.get("/:user/:repo/objects/:oid", async function (req: any, res: any) {
     const jwtVerify = checkJWT("download");

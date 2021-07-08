@@ -13,84 +13,88 @@ const STORE = Store.getStore(
 
 import BATCH_REQUEST_SCHEMA from "../../schemas/http-v1-batch-request-schema.json";
 
-/**
- * Process upload object
- *
- * @param {String} user
- * @param {String} repo
- * @param {Object} object
- * @returns {Object}
- */
-var handleUploadObject = async function (user: any, repo: any, object: any) {
-  var oid = object.oid;
-  var size = object.size;
-
-  return {
-    oid: `${oid}`,
-    size: size,
-    actions: {
-      upload: STORE.getUploadAction(user, repo, oid, size),
-      verify: STORE.getVerifyAction(user, repo, oid, size),
-    },
-  };
-};
-
-/**
- * Process download object
- *
- * @param {String} user
- * @param {String} repo
- * @param {Object} object
- * @returns {Object}
- */
-var handleDownloadObject = async function (user: any, repo: any, object: any) {
-  var oid = object.oid;
-  var size = object.size;
-
-  var result: any = {
-    oid: oid,
-    size: size,
-  };
-
-  var exist = await STORE.exist(user, repo, oid);
-  if (exist) {
-    result.actions = {
-      download: STORE.getDownloadAction(user, repo, oid, size),
-    };
-  } else {
-    result.error = {
-      code: 404,
-      message: "Object does not exist on the server",
-    };
-  }
-  return result;
-};
-
-/**
- * Process verify object
- *
- * @param {String} user
- * @param {String} repo
- * @param {Object} object
- * @returns {Object}
- */
-var handleVerifyObject = async function (user: any, repo: any, object: any) {
-  var oid = object.oid;
-  var size = object.size;
-
-  return {
-    oid: oid,
-    size: size,
-    actions: {
-      verify: STORE.getVerifyAction(user, repo, oid, size),
-    },
-  };
-};
-
 export default function (fastify: any) {
+  /**
+   * Process upload object
+   *
+   * @param {String} user
+   * @param {String} repo
+   * @param {Object} object
+   * @returns {Object}
+   */
+  var handleUploadObject = async function (user: any, repo: any, object: any) {
+    var oid = object.oid;
+    var size = object.size;
+    fastify.log.info({ msg: "handleUploadObject", oid, size, user, repo });
+    return {
+      oid: `${oid}`,
+      size: size,
+      actions: {
+        upload: STORE.getUploadAction(user, repo, oid, size),
+        verify: STORE.getVerifyAction(user, repo, oid, size),
+      },
+    };
+  };
+
+  /**
+   * Process download object
+   *
+   * @param {String} user
+   * @param {String} repo
+   * @param {Object} object
+   * @returns {Object}
+   */
+  var handleDownloadObject = async function (
+    user: any,
+    repo: any,
+    object: any
+  ) {
+    var oid = object.oid;
+    var size = object.size;
+    fastify.log.info({ msg: "handleDownloadObject", oid, user, repo });
+    var result: any = {
+      oid: oid,
+      size: size,
+    };
+
+    var exist = await STORE.exist(user, repo, oid);
+    if (exist) {
+      result.actions = {
+        download: STORE.getDownloadAction(user, repo, oid, size),
+      };
+    } else {
+      result.error = {
+        code: 404,
+        message: "Object does not exist on the server",
+      };
+    }
+    return result;
+  };
+
+  /**
+   * Process verify object
+   *
+   * @param {String} user
+   * @param {String} repo
+   * @param {Object} object
+   * @returns {Object}
+   */
+  var handleVerifyObject = async function (user: any, repo: any, object: any) {
+    var oid = object.oid;
+    var size = object.size;
+    fastify.log.info({ msg: "handleVerifyObject", oid, user, repo });
+    return {
+      oid: oid,
+      size: size,
+      actions: {
+        verify: STORE.getVerifyAction(user, repo, oid, size),
+      },
+    };
+  };
+
   fastify.post(
     "/:user/:repo/objects/batch",
-    async function (req: any, res: any, next: any) {
+    async function (req: any, res: any) {
       // validate request body according to JSON Schema
       try {
         var body = req.body;
@@ -99,7 +103,7 @@ export default function (fastify: any) {
         if (!valid) {
           let err: any = new Error();
           err.status = 422;
-          next(err);
+          throw err;
         }
 
         res.header("Content-Type", "application/vnd.git-lfs+json");
@@ -147,7 +151,7 @@ export default function (fastify: any) {
         };
         res.code(200).send(response);
       } catch (err) {
-        next(err);
+        throw err;
       }
     }
   );
