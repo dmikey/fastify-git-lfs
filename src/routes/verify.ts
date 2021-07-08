@@ -28,8 +28,8 @@ export default function (app: any) {
         // if (size !== objectSize) {
         //   return res.status(422).end();
         // }
-
-        res.code(200).send();
+        res.status(422).send();
+        // res.code(200).send();
       } catch (err) {
         next(err);
       }

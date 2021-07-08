@@ -91,7 +91,6 @@ export default function (fastify: any) {
   fastify.post(
     "/:user/:repo/objects/batch",
     async function (req: any, res: any, next: any) {
-      console.log("live route");
       // validate request body according to JSON Schema
       try {
         var body = req.body;

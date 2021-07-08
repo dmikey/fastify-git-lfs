@@ -50,17 +50,13 @@ export default class SiaSkyStore extends Store {
     (this as any)._skynet = new SkynetClient();
   }
 
-  put(user: any, repo: any, oid: any, stream: any) {
+  async put(user: any, repo: any, oid: any, stream: any) {
     var self: any = this;
-    return new Promise(function (resolve, reject) {
-      (async () => {
-        const skylink = await self._skynet.uploadFile(
-          new Buffer(stream.body, "binary")
-        );
-        console.log(`Upload successful, skylink: ${skylink}`);
-        resolve(skylink);
-      })();
-    });
+    const skylink = await self._skynet.uploadFile(
+      new Buffer(stream.body, "binary")
+    );
+    console.log(`Upload successful, skylink: ${skylink}`);
+    return skylink;
   }
 
   get(user: any, repo: any, oid: any) {

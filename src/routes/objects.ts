@@ -10,34 +10,33 @@ const store = Store.getStore(
 
 export default function (fastify: any) {
   fastify.put("/:user/:repo/objects/:oid", async function (req: any, res: any) {
-    checkJWT("upload")(req, res);
+    const jwtVerify = checkJWT("upload");
+    await jwtVerify(req, res);
     if (req.body) {
       await store.put(req.params.user, req.params.repo, req.params.oid, req);
+      if (!res.sent) res.code(200).send();
     }
-    res.code(200).send();
   });
 
-  fastify.get(
-    "/:user/:repo/objects/:oid",
-    async function (req: any, res: any, next: any) {
-      checkJWT("download")(req, res);
-      var size: any = await store.getSize(
-        req.params.user,
-        req.params.repo,
-        req.params.oid
-      );
-      if (size < 0) {
-        return res.sendStatus(404);
-      }
-      res.set("Content-Length", size);
-      var dataStream: any = await store.get(
-        req.params.user,
-        req.params.repo,
-        req.params.oid
-      );
-      dataStream.pipe(res);
+  fastify.get("/:user/:repo/objects/:oid", async function (req: any, res: any) {
+    const jwtVerify = checkJWT("download");
+    await jwtVerify(req, res);
+    var size: any = await store.getSize(
+      req.params.user,
+      req.params.repo,
+      req.params.oid
+    );
+    if (size < 0) {
+      res.code(404).send();
     }
-  );
+    res.set("Content-Length", size);
+    var dataStream: any = await store.get(
+      req.params.user,
+      req.params.repo,
+      req.params.oid
+    );
+    dataStream.pipe(res);
+  });
 }
 
 var checkJWT = function (action: any) {
@@ -47,10 +46,10 @@ var checkJWT = function (action: any) {
     let repo = req.params.repo;
     let oid = req.params.oid;
 
-    let authorization = req.header("Authorization");
+    let authorization = req.headers["authorization"];
 
     if (!authorization || !authorization.startsWith("JWT ")) {
-      return res.status(401).end();
+      res.status(401).send();
     }
 
     authorization = authorization.substring(4, authorization.length);
@@ -64,11 +63,11 @@ var checkJWT = function (action: any) {
         decoded.repo != repo ||
         (decoded.oid && decoded.oid != oid)
       ) {
-        return res.status(403).end();
+        res.code(403).send();
       }
     } catch (err) {
       // Any JWT error is considered as Forbidden
-      return res.status(403).end();
+      res.code(403).send();
     }
   };
 };
