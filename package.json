@@ -1,0 +1,36 @@
+{
+  "name": "@dmikey/fastify-git-lfs",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "description": "Fastify GIT LFS Server",
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "ts-node ./src/",
+    "start": "node ./dist/src/",
+    "test": "exit 0",
+    "prepublishOnly": "build"
+  },
+  "bin": "./dist/src/index.js",
+  "main": "./dist/src/index.js",
+  "repository": "ovrclk/node-gitlfs",
+  "dependencies": {
+    "@nebulous/skynet": "^2.0.1",
+    "@types/express": "^4.17.13",
+    "@types/lodash": "^4.14.171",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^16.0.1",
+    "config": "^1.16.0",
+    "fastify": "^3.18.1",
+    "file-type": "^16.5.0",
+    "form-data": "^4.0.0",
+    "jsonschema": "^1.0.2",
+    "jsonwebtoken": "^5.4.0",
+    "lodash": "^3.10.1",
+    "middie": "^5.3.0",
+    "mongodb": "^2.0.46",
+    "mongoose": "^4.1.11",
+    "ms": "^0.7.1",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.5"
+  }
+}
