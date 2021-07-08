@@ -31,7 +31,10 @@ export default function (fastify: any) {
       size: size,
       actions: {
         upload: STORE.getUploadAction(user, repo, oid, size),
-        verify: STORE.getVerifyAction(user, repo, oid, size),
+
+        // skipping verification of objects right now because a 422 on the client doesn't
+        // prevent the commit from happening, a 200 response on upload confirms already
+        // verify: STORE.getVerifyAction(user, repo, oid, size),
       },
     };
   };
