@@ -4,7 +4,7 @@ import _ from "lodash";
 import config from "config";
 import { validate } from "jsonschema";
 
-var { Store } = require("../store");
+const { Store } = require("../store");
 
 const STORE = Store.getStore(
   config.get("store.type"),
@@ -22,9 +22,9 @@ export default function (fastify: any) {
    * @param {Object} object
    * @returns {Object}
    */
-  var handleUploadObject = async function (user: any, repo: any, object: any) {
-    var oid = object.oid;
-    var size = object.size;
+  let handleUploadObject = async function (user: any, repo: any, object: any) {
+    let oid = object.oid;
+    let size = object.size;
     fastify.log.info({ msg: "handleUploadObject", oid, size, user, repo });
     return {
       oid: `${oid}`,
@@ -47,20 +47,20 @@ export default function (fastify: any) {
    * @param {Object} object
    * @returns {Object}
    */
-  var handleDownloadObject = async function (
+  let handleDownloadObject = async function (
     user: any,
     repo: any,
     object: any
   ) {
-    var oid = object.oid;
-    var size = object.size;
+    let oid = object.oid;
+    let size = object.size;
     fastify.log.info({ msg: "handleDownloadObject", oid, user, repo });
-    var result: any = {
+    let result: any = {
       oid: oid,
       size: size,
     };
 
-    var exist = await STORE.exist(user, repo, oid);
+    let exist = await STORE.exist(user, repo, oid);
     if (exist) {
       result.actions = {
         download: STORE.getDownloadAction(user, repo, oid, size),
@@ -82,9 +82,9 @@ export default function (fastify: any) {
    * @param {Object} object
    * @returns {Object}
    */
-  var handleVerifyObject = async function (user: any, repo: any, object: any) {
-    var oid = object.oid;
-    var size = object.size;
+  let handleVerifyObject = async function (user: any, repo: any, object: any) {
+    let oid = object.oid;
+    let size = object.size;
     fastify.log.info({ msg: "handleVerifyObject", oid, user, repo });
     return {
       oid: oid,
@@ -100,9 +100,9 @@ export default function (fastify: any) {
     async function (req: any, res: any) {
       // validate request body according to JSON Schema
       try {
-        var body = req.body;
+        let body = req.body;
         req.jsonBody = body;
-        var valid = validate(body, BATCH_REQUEST_SCHEMA).valid;
+        let valid = validate(body, BATCH_REQUEST_SCHEMA).valid;
         if (!valid) {
           let err: any = new Error();
           err.status = 422;
@@ -111,8 +111,7 @@ export default function (fastify: any) {
 
         res.header("Content-Type", "application/vnd.git-lfs+json");
 
-        var body = req.jsonBody;
-        var operation = body.operation;
+        let operation = body.operation;
 
         // validate operation
         if (
@@ -149,7 +148,7 @@ export default function (fastify: any) {
         });
 
         results = await Promise.all(yields);
-        var response = {
+        let response = {
           objects: results,
         };
         res.code(200).send(response);

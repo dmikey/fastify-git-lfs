@@ -1,17 +1,17 @@
 import { Store } from "./index";
 import mongoose from "mongoose";
 import FileType from "file-type";
-var toArray = require("stream-to-array");
-
+const config = require("config");
+const toArray = require("stream-to-array");
 const { SkynetClient } = require("@nebulous/skynet");
 const {
   defaultOptions,
   uriSkynetPrefix,
 } = require("@nebulous/skynet/src/utils");
 
-var _FormData: any = require("form-data");
+const _FormData: any = require("form-data");
 
-mongoose.connect("mongodb://localhost:27017/gitlfs", {
+mongoose.connect(config.get("mongo"), {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -63,11 +63,7 @@ db.on("error", console.error.bind(console, "connection error:"));
 };
 
 // modified to return buffer
-(SkynetClient as any).prototype.downloadFile = function (
-  path: any,
-  skylink: any,
-  customOptions = {}
-) {
+(SkynetClient as any).prototype.downloadFile = function (skylink: any) {
   const opts = {
     ...defaultOptions("/"),
   };
@@ -103,7 +99,7 @@ export default class SiaSkyStore extends Store {
   }
 
   async put(user: any, repo: any, oid: any, stream: any) {
-    var self: any = this;
+    let self: any = this;
     const size = stream.headers["content-length"];
     const skylink = await self._skynet.uploadFile(
       Buffer.from(stream.body, "binary")
@@ -116,10 +112,10 @@ export default class SiaSkyStore extends Store {
   }
 
   async get(user: any, repo: any, oid: any) {
-    var self: any = this;
+    let self: any = this;
     const file: any = await File.find({ oid: `${oid}` });
     const skylink = file[0]?.skylink.replace("sia://", "");
-    const fileData: any = await self._skynet.downloadFile(null, skylink);
+    const fileData: any = await self._skynet.downloadFile(skylink);
     const fileType = await FileType.fromBuffer(fileData);
     return {
       fileType,

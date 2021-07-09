@@ -1,9 +1,8 @@
 "use strict";
 
-var config = require("config");
-var jwt = require("jsonwebtoken");
-var ms = require("ms");
-
+const config = require("config");
+const jwt = require("jsonwebtoken");
+const ms = require("ms");
 const BASE_URL = config.get("base_url");
 const JWT_CONFIG = config.get("jwt");
 
@@ -148,7 +147,7 @@ export class Store {
    * @param {String} [oid], empty for verify request
    */
   static _generateJWTToken(action: any, user: any, repo: any, oid: any) {
-    var signObject = {
+    let signObject = {
       user: user,
       repo: repo,
       action: action,
