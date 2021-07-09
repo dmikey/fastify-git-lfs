@@ -30,8 +30,9 @@
     "jsonwebtoken": "^5.4.0",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.46",
-    "mongoose": "^4.1.11",
+    "mongoose": "^5.13.2",
     "ms": "^0.7.1",
+    "stream-to-array": "^2.3.0",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.5"
   }
