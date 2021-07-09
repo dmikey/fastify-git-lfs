@@ -23,7 +23,7 @@ Add trackable binary files (creates a `.gitattributes` to commit to repo)
 git lfs track "*.png"
 ```
 
-Create a `.lsfconfig` file in the root of your repository, point it to our open SiaSky uploader, or to a self hosted version if you prefer.
+Create a `.lfsconfig` file in the root of your repository, point it to our open SiaSky uploader, or to a self hosted version if you prefer.
 
 ```text
 [lfs]

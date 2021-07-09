@@ -43,12 +43,13 @@ export default function (fastify: any) {
     if (size < 0) {
       res.code(404).send();
     }
-    res.headers("Content-Length", size);
+
     const dataStream: any = await store.get(
       req.params.user,
       req.params.repo,
       req.params.oid
     );
+    res.headers("Content-Length", dataStream.fileData.length);
     res.type(dataStream.fileType.mime);
     res.code(200).send(dataStream.fileData);
   });
