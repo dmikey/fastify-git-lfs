@@ -40,8 +40,9 @@ export default function (fastify: any) {
       req.params.repo,
       req.params.oid
     );
-    if (size < 0) {
-      res.code(404).send();
+
+    if (size <= 0) {
+      return res.code(404).send();
     }
 
     const dataStream: any = await store.get(
@@ -49,7 +50,8 @@ export default function (fastify: any) {
       req.params.repo,
       req.params.oid
     );
-    res.headers("Content-Length", dataStream.fileData.length);
+
+    res.headers("Content-Length", dataStream.size);
     res.type(dataStream.fileType.mime);
     res.code(200).send(dataStream.fileData);
   });

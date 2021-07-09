@@ -21,6 +21,7 @@ const fileSchema: any = new mongoose.Schema({
   user: String,
   repo: String,
   skylink: String,
+  size: String,
 });
 
 const File = mongoose.model("File", fileSchema);
@@ -103,10 +104,11 @@ export default class SiaSkyStore extends Store {
 
   async put(user: any, repo: any, oid: any, stream: any) {
     var self: any = this;
+    const size = stream.headers["content-length"];
     const skylink = await self._skynet.uploadFile(
       Buffer.from(stream.body, "binary")
     );
-    const file = new File({ user, repo, oid, skylink });
+    const file = new File({ user, repo, oid, skylink, size });
     file.save(function (err) {
       if (err) return console.error(err);
     });
@@ -122,6 +124,7 @@ export default class SiaSkyStore extends Store {
     return {
       fileType,
       fileData,
+      size: file[0].size,
     };
   }
 
@@ -131,14 +134,13 @@ export default class SiaSkyStore extends Store {
       ? {
           oid: file[0].oid,
           skylink: file[0].skylink.replace("sia://", "https://siasky.net/"),
+          size: file[0].size,
         }
       : {};
   }
 
-  getSize(user: any, repo: any, oid: any) {
-    var self = this;
-    return new Promise(function (resolve, reject) {
-      resolve(1);
-    });
+  async getSize(user: any, repo: any, oid: any) {
+    const file: any = await File.find({ oid: `${oid}` });
+    return file[0] && file[0].size ? file[0].size : 0;
   }
 }

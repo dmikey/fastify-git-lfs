@@ -52,6 +52,16 @@ oid sha256:a480292a083cffbae4602079113e3b6ed8e7ed24ffabda282eb2054460ad7325
 size 65898
 ```
 
+Your files are now stored on Skynet. To continue working with your files locally, use `git lfs`!
+
+```
+git checkout branch
+git lfs fetch
+git lfs checkout
+```
+
+Your images are downloaded from Skynet, and the pointer files are updated locally.
+
 ## No Verification
 
 Why? Because git lfs doesn't use it to prevent commit. If a server responds 200 to an upload, git lfs is hitting verification for the benefit of the server. When this changes, verification will be enabled.
